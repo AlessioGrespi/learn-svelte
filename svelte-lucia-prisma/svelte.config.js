@@ -1,4 +1,6 @@
 import adapter from '@sveltejs/adapter-auto';
+import startInspector from 'svelte-inspector';
+startInspector();
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {

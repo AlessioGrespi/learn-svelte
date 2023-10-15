@@ -11,62 +11,52 @@ export const load: PageServerLoad = async ({ locals }) => {
 
 export const actions: Actions = {
 	login: async ({ request, cookies }) => {
-
- 		const email = Object.fromEntries(await request.formData()) 
-
-		console.log('aaaaa', (email))
-
+		const email = 'a@a.com'; // Replace with the email from the form submission
+		const password = 'pass'; // Replace with the provided password
+		//const email = Object.fromEntries(await request.formData()) 
+		//console.log('aaaaa', (email))
 		try {
-			const users = await prisma.users.findUniqueOrThrow({ // throws error when email not existing
-				where: { email: String('a@a.com') } // To do next, accept form submission
-				//where: 
-			})
-			//console.log("db read")
-			//console.log(users)
-			cookies.set("usertype", "user", {
-				path: "/",
-				httpOnly: true,
-				sameSite: "strict",
-				secure: process.env.NODE_ENV === "production",
-				maxAge: 60 * 60 * 24 * 7, // 1 week
-			})
-			cookies.set("email", "email", {
-				path: "/",
-				httpOnly: true,
-				sameSite: "strict",
-				secure: process.env.NODE_ENV === "production",
-				maxAge: 60 * 60 * 24 * 7, // 1 week
-			})
+			const user = await prisma.user.findUniqueOrThrow({
+				where: { email: email } // Find the user by email
+			});
 
+			const passwordDB = await prisma.password.findUniqueOrThrow({
+				where: { userId: user.id } // Find the user by email
+			});
+			
+			console.log(user)
+			console.log(passwordDB);
+			console.log(password)
 
-
-
+			if (passwordDB.password !== password){
+				throw error(500, "error")
+			}
+			
 		} catch (err) {
-			console.log("No Email of this type")
-			//console.error(err)
-			return fail(500, { message: "No Email found" })
+			console.error('An error occurred:', err);
+			console.log("ERROR ERROR ERROR")
+			return fail(500, { message: "An error occurred" });
 		}
+
+		// Return the appropriate response
 		return {
-			
-
 			status: 202,
+		};
 
-			
-		}
 	}
 
 
 }
 
-	/* login: async ({ cookies }) => { //set cookies
-		cookies.set("auth", "regularusertoken", {
-			path: "/",
-			httpOnly: true,
-			sameSite: "strict",
-			secure: process.env.NODE_ENV === "production",
-			maxAge: 60 * 60 * 24 * 7, // 1 week
-		})
+/* login: async ({ cookies }) => { //set cookies
+	cookies.set("auth", "regularusertoken", {
+		path: "/",
+		httpOnly: true,
+		sameSite: "strict",
+		secure: process.env.NODE_ENV === "production",
+		maxAge: 60 * 60 * 24 * 7, // 1 week
+	})
 
-		throw redirect(303, "/")
-	}, */
+	throw redirect(303, "/")
+}, */
 

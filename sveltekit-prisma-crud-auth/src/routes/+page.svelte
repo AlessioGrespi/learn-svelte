@@ -5,8 +5,8 @@
 </script>
 
 <main>
-    {#if data.user}
-		<p>Welcome, {data.user.email}</p>
+    {#if data.email}
+		<p>Welcome, {data.email}</p>
 	{:else}
 		<div>
 			<form action="?/login" method="POST">
@@ -14,10 +14,10 @@
                     Email
                     <input name="email" id="email" type="email">
                 </label>
-               <!--  <label>
+               <label>
                     Password
                     <input name="password" id="password" type="password">
-                </label> -->
+                </label>
 				<button type="submit">Login</button>
 			</form>
 		</div>

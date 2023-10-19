@@ -3,9 +3,10 @@ import { prisma } from "$lib/server/prisma"
 
 import { error, fail, redirect } from "@sveltejs/kit"
 
-export const load: PageServerLoad = async ({ locals }) => {
+export const load: PageServerLoad = async ({ locals, cookies }) => {
 	return {
 		user: locals.user,
+		email: cookies.get('user'),
 	}
 }
 
@@ -13,11 +14,14 @@ export const actions: Actions = {
 	login: async ({ request, cookies }) => {
 		const email = 'a@a.com'; // Replace with the email from the form submission
 		const password = 'pass'; // Replace with the provided password
-		//const email = Object.fromEntries(await request.formData()) 
-		//console.log('aaaaa', (email))
+		
+		const emailform = Object.fromEntries(await request.formData()) 
+		
+		//console.log(emailform)
+
 		try {
 			const user = await prisma.user.findUniqueOrThrow({
-				where: { email: email } // Find the user by email
+				where: { email: emailform.email } // Find the user by email
 			});
 
 			const passwordDB = await prisma.password.findUniqueOrThrow({
@@ -26,11 +30,27 @@ export const actions: Actions = {
 			
 			console.log(user)
 			console.log(passwordDB);
-			console.log(password)
+			console.log(emailform.password)
 
-			if (passwordDB.password !== password){
+			if (passwordDB.password !== emailform.password){
 				throw error(500, "error")
 			}
+
+			cookies.set("user", user.email, {
+				path: "/",
+				httpOnly: true,
+				sameSite: "strict",
+				secure: process.env.NODE_ENV === "production",
+				maxAge: 60 * 60 * 24 * 7, // 1 week
+			})
+
+			cookies.set("usertype", user.usertype, {
+				path: "/",
+				httpOnly: true,
+				sameSite: "strict",
+				secure: process.env.NODE_ENV === "production",
+				maxAge: 60 * 60 * 24 * 7, // 1 week
+			})
 			
 		} catch (err) {
 			console.error('An error occurred:', err);

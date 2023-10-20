@@ -33,10 +33,10 @@
 				<p>
 					{post.content}
 				</p>
-<!-- 				<form action="?/deleteArticle&id={post.id}" method="POST">
+				<form action="?/deletePost&id={post.id}" method="POST">
 					<button type="submit" class="outline secondary">Delete post</button>
 				</form>
-				<a href="/{post.id}" role="button" class="outline constrast" style="width: 100%;"
+<!-- 				<a href="/{post.id}" role="button" class="outline constrast" style="width: 100%;"
 					>Edit post</a
 				> -->
 			</article>

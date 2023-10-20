@@ -101,18 +101,30 @@ export const actions: Actions = {
 		return {
 			status: 201,
 		}
-	}
+	},
+
+	deletePost: async ({ url }) => {
+		const id = url.searchParams.get("id")
+
+		if (!id) {
+			return fail(400, { message: "Invalid request" })
+		}
+
+		try {
+			await prisma.post.delete({
+				where: {
+					id: id,
+				},
+			})
+		} catch (err) {
+			console.error(err)
+			return fail(500, {
+				message: "Something went wrong deleting your post",
+			})
+		}
+
+		return {
+			status: 200,
+		}
+	},
 }
-
-/* login: async ({ cookies }) => { //set cookies
-	cookies.set("auth", "regularusertoken", {
-		path: "/",
-		httpOnly: true,
-		sameSite: "strict",
-		secure: process.env.NODE_ENV === "production",
-		maxAge: 60 * 60 * 24 * 7, // 1 week
-	})
-
-	throw redirect(303, "/")
-}, */
-

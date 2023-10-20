@@ -55,6 +55,14 @@ export const actions: Actions = {
 				secure: process.env.NODE_ENV === "production",
 				maxAge: 60 * 60 * 24 * 7, // 1 week
 			})
+
+			cookies.set("userid", user.id, {
+				path: "/",
+				httpOnly: true,
+				sameSite: "strict",
+				secure: process.env.NODE_ENV === "production",
+				maxAge: 60 * 60 * 24 * 7, // 1 week
+			})
 			
 		} catch (err) {
 			console.error('An error occurred:', err);
@@ -67,9 +75,33 @@ export const actions: Actions = {
 			status: 202,
 		};
 
+	},
+
+	createPost: async ({ request, cookies }) => {
+		const { title, content } = Object.fromEntries(await request.formData()) as {
+			title: string
+			content: string
+		}
+
+		const authorId = cookies.get("userid")
+
+		try {
+			await prisma.post.create({
+				data: {
+					title,
+					content,
+					authorId,
+				},
+			})
+		} catch (err) {
+			console.error(err)
+			return fail(500, { message: "Could not create the article." })
+		}
+
+		return {
+			status: 201,
+		}
 	}
-
-
 }
 
 /* login: async ({ cookies }) => { //set cookies

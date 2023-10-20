@@ -5,25 +5,18 @@ export const authenticateUser = (event: RequestEvent) => {
 	const { cookies } = event
 
 	// get the user token from the cookie
-	const userToken = cookies.get("auth")
+	const userToken = cookies.get("usertype")
+
+	console.log("Checking user in server")
 
 	// if the user token is not valid, return null
 	// this is where you would check the user token against your database
 	// to see if it is valid and return the user object
-	if (userToken === "regularusertoken") {
+	if (userToken === "USER") {
 		const user = {
-			id: 1,
-			email: "user@example.com",
 			role: "USER",
 		}
-		return user
-	}
-	if (userToken === "adminusertoken") {
-		const user = {
-			id: 2,
-			email: "admin@example.com",
-			role: "ADMIN",
-		}
+		console.log(user)
 		return user
 	}
 

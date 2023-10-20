@@ -9,7 +9,7 @@
 <main>
     {#if data.email}
 		<p>Welcome, {data.email}</p>
-	{:else}
+	<!-- {:else}
 		<div>
 			<form action="?/login" method="POST">
                 <label>
@@ -22,10 +22,10 @@
                 </label>
 				<button type="submit">Login</button>
 			</form>
-		</div>
+		</div> -->
 	{/if}
 
-	<div>
+	<!-- <div>
 		<h2>Posts:</h2>
 		{#each posts as post}
 			<article>
@@ -51,7 +51,7 @@
 			<button type="submit">Add Post</button>
 		</form>
 	</div>
-
+ -->
 
 
 

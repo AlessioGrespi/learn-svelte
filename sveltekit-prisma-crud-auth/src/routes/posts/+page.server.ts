@@ -9,3 +9,32 @@ export const load: PageServerLoad = async () => {
 		posts: await prisma.post.findMany(),
 	}
 }
+
+
+export const actions: Actions = {
+
+	deletePost: async ({ url }) => {
+		const id = url.searchParams.get("id")
+
+		if (!id) {
+			return fail(400, { message: "Invalid request" })
+		}
+
+		try {
+			await prisma.post.delete({
+				where: {
+					id: id,
+				},
+			})
+		} catch (err) {
+			console.error(err)
+			return fail(500, {
+				message: "Something went wrong deleting your post",
+			})
+		}
+
+		return {
+			status: 200,
+		}
+	},
+}

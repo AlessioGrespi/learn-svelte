@@ -6,7 +6,14 @@
 	$: ({ posts } = data)
 </script>
 
-
+<form action="?/createPost" method="POST">
+    <h3>New Post</h3>
+    <label for="title"> Title </label>
+    <input type="text" id="title" name="title" />
+    <label for="content"> Content </label>
+    <textarea id="content" name="content" rows={5} />
+    <button type="submit">Add Post</button>
+</form>
 
 <div>
     <h2>Posts:</h2>
@@ -16,12 +23,12 @@
             <p>
                 {post.content}
             </p>
-<!-- 				<form action="?/deleteArticle&id={post.id}" method="POST">
+				<form action="?/deleteArticle&id={post.id}" method="POST">
                 <button type="submit" class="outline secondary">Delete post</button>
             </form>
-            <a href="/{post.id}" role="button" class="outline constrast" style="width: 100%;"
+            <a href="/posts/{post.id}" role="button" class="outline constrast" style="width: 100%;"
                 >Edit post</a
-            > -->
+            >
         </article>
     {/each}
 

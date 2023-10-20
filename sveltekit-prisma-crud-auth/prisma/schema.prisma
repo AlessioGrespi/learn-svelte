@@ -18,6 +18,7 @@ model User {
   email    String    @unique // Unique email address for each user
   usertype String    @default("USER") // User type with a default value of "USER"
   password Password? // One-to-one relation to the Password model
+  posts    Post[]
 }
 
 // Model for storing user passwords securely
@@ -26,4 +27,13 @@ model Password {
   password String // Field to store the hashed password
   userId   String @unique // Unique user ID, used for the relation to the User model
   user     User   @relation(fields: [userId], references: [id]) // Establish a relation to the User model
+}
+
+model Post {
+  id       String @id @unique @default(cuid()) // Unique identifier for each password
+  title    String
+  content  String
+  author   User   @relation(fields: [authorId], references: [id]) // Establish a relation to the User model
+  authorId String
+  
 }
